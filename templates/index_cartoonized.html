@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ToonPix</title>
+  <link rel="icon" href="static/logo.png" type="image/png">
+  <style>
+    /* Reset default margin and padding, set box-sizing and font */
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Background and font styling for body */
+    body {
+      background: linear-gradient(to right, #afdde5, #EAE7DC);
+      text-align: center;
+      padding: 30px;
+      color: #333;
+      overflow-y: auto; /* Enable scroll */
+    }
+
+    /* Custom scrollbar styling */
+    ::-webkit-scrollbar {
+      background-color: transparent;
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(#21d4fd, #b721ff);
+      border-radius: 100px;
+    }
+
+    /* Logo Section in the top-left corner */
+    .logo-container {
+      position: absolute;
+      top: 20px; /* Adjust vertical position */
+      left: 20px; /* Adjust horizontal position */
+      display: flex;
+      align-items: center;
+      gap: 10px; /* Space between the logo and the text */
+    }
+    .logo {
+      width: 50px; /* Adjust logo size */
+      height: auto;
+    }
+    .logo-text {
+      font-size: 2rem; /* Adjust font size */
+      font-weight: bold;
+      color: #333; /* Text color */
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .select{
+      font-size: 2rem;
+    }
+
+    .file-input-container {
+      display: flex;
+      justify-content: center;
+      margin: 12px 0;
+    }
+    .choose {
+      font-size: 1.5rem;
+      width: auto;
+      max-width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f8f8f8;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .choose:hover {
+      background: #eee;
+      border-color: #ccc;
+    }
+
+    .cartoonize{
+      font-size: 1.5rem;
+    }
+
+    h1 {
+      color: transparent;
+      background: linear-gradient(to right, #003135, #ff9090);
+      -webkit-background-clip: text;
+      background-clip: text;
+      font-size: 4rem; /* Increased font size */
+      font-weight: bold; /* Bolder font */
+      margin-bottom: 25px;
+      text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1); /* Added text shadow for depth */
+    }
+
+    .form-container {
+      background: #fffdf5;
+      padding: 35px;
+      border-radius: 20px;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .flash-message {
+      color: #d32f2f;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+    .toggle-buttons {
+      margin-bottom: 25px;
+    }
+    .toggle-buttons button {
+      padding: 12px 30px;
+      margin: 0 10px;
+      background: #ffb3b3;
+      border: none;
+      color: #3e2723;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .toggle-buttons button.active {
+      background: #ff7f7f;
+      color: white;
+      font-weight: bold;
+    }
+    form {
+      display: none;
+      margin-top: 20px;
+    }
+    form.active {
+      display: block;
+    }
+    input[type="file"] {
+      margin: 12px 0;
+      padding: 6px;
+    }
+    button[type="submit"] {
+      padding: 10px 24px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button[type="submit"]:hover {
+      background: #388e3c;
+    }
+    .preview-image, .preview-video {
+      max-width: 100%;
+      max-height: 500px;
+      margin: 20px 0;
+      border-radius: 14px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    }
+    .download-box {
+      margin-top: 20px;
+      padding: 22px;
+      background: #e3f2fd;
+      border-radius: 14px;
+      display: inline-block;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .download-btn {
+      padding: 10px 24px;
+      background: #0288d1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .download-btn:hover {
+      background: #0277bd;
+    }
+    /* NEW: Creative Hover Effect Section */
+    .clip-container {
+      position: relative;
+      width: 600px; /* Increased size */
+      height: 450px; /* Increased size */
+      background: #222;
+      overflow: hidden;
+      border-radius: 15px;
+    }
+    .clip {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: all 0.5s;
+    }
+    .clip1 {
+      background: url(/static/page_images/clip3.jpg);
+      background-size: cover;
+      background-position: center;
+      clip-path: polygon(0 0, 46% 0, 39% 100%, 0 100%);
+    }
+    .clip2 {
+      background: url(/static/page_images/clippp1.jpg);
+      background-size: cover;
+      background-position: center;
+      clip-path: polygon(19% 0, 87% 0, 64% 100%, 33% 100%);
+    }
+    .clip3 {
+      background: url(/static/page_images/clip2.jpg);
+      background-size: cover;
+      background-position: center;
+      clip-path: polygon(82% 0, 100% 0, 100% 100%, 63% 100%);
+    }
+    .clip-container:hover .clip {
+      clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+    }
+    .clip-container .clip:hover {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    /* NEW: Flex container for clip & text */
+    .clip-text-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 80px; /* Increased space between image and text */
+      margin: 50px auto 0;
+      max-width: 1200px;
+    }
+    .text-container {
+      text-align: left;
+      max-width: 600px;
+    }
+    .text-container h2 {
+      font-size: 3rem; /* Increased font size */
+      margin-bottom: 30px; /* Increased space below the heading */
+      color: #333;
+    }
+    .text-container p {
+      font-size: 1.5rem; /* Increased font size */
+      line-height: 1.8; /* Increased line-height for readability */
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo Section in the top-left corner -->
+  <div class="logo-container">
+    <img src="/static/logo.png" alt="Cartoonize Logo" class="logo">
+    <span class="logo-text">ToonPix</span>
+  </div>
+
+  <h1>Cartoonize Image or Video</h1>
+
+  <div class="form-container">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div>
+          {% for message in messages %}
+            <p class="flash-message">{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="toggle-buttons">
+      <button id="imageBtn" class="active" onclick="toggleForm('image')">Image</button>
+      <button id="videoBtn" onclick="toggleForm('video')">Video</button>
+    </div>
+
+    <!-- Image Form -->
+    <form id="imageForm" class="active" method="post" action="/cartoonize_image" enctype="multipart/form-data">
+      <p class="select"><strong>Select an image to cartoonize:</strong></p>
+      <div class="file-input-container">
+        <input type="file" name="image" accept="image/*" class="choose" required onchange="previewMedia(event, 'image')">
+      </div>
+      
+      <div id="imagePreview">
+        {% if cartoonized_image %}
+          <img src="{{ url_for('static', filename=cartoonized_image.split('static/')[-1]) }}" class="preview-image">
+        {% endif %}
+      </div>
+      <button type="submit" class="cartoonize">Cartoonize Image</button>
+    </form>
+
+    <!-- Video Form -->
+    <form id="videoForm" method="post" action="/cartoonize_video" enctype="multipart/form-data">
+      <p class="select"><strong>Select a video to cartoonize:</strong></p>
+      <div class="file-input-container">
+        <input type="file" name="video" accept="video/*" class="choose" required onchange="previewMedia(event, 'video')">
+      </div>
+      
+      <div id="videoPreview">
+        {% if cartoonized_video %}
+          <video class="preview-video" controls>
+            <source src="{{ url_for('static', filename=cartoonized_video.split('static/')[-1]) }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        {% endif %}
+      </div>
+      <button type="submit" class="cartoonize">Cartoonize Video</button>
+    </form>
+
+    <!-- Download Section -->
+    {% if cartoonized_image %}
+      <div class="download-box">
+        <p ><strong>Download your cartoonized image (valid for 5 minutes):</strong></p>
+        <a href="{{ url_for('static', filename=cartoonized_image.split('static/')[-1]) }}" download>
+          <button class="download-btn">Download Image</button>
+        </a>
+      </div>
+    {% endif %}
+    {% if cartoonized_video %}
+      <div class="download-box">
+        <p><strong>Download your cartoonized video (valid for 5 minutes):</strong></p>
+        <a href="{{ url_for('static', filename=cartoonized_video.split('static/')[-1]) }}" download>
+          <button class="download-btn">Download Video</button>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- EXTRA SECTION: Creative Hover Effect with Text on the Right -->
+  <section class="clip-text-container">
+    <div class="clip-container">
+      <div class="clip clip1"></div>
+      <div class="clip clip2"></div>
+      <div class="clip clip3"></div>
+    </div>
+    <div class="text-container">
+      <h2>Toon yourself or anything for exciting portraits!</h2>
+      <p>
+        ToonPix helps you convert any image or video into a cartoonized version in just one click! Whether it's a picture of yourself, friends, or anything else, ToonPix effortlessly brings amazing cartoon effects to life. Plus, you can download your cartoonized creation for up to 5 minutes! Get ready to enjoy endless fun and share your cartooned masterpieces now!
+      </p>
+    </div>
+  </section>
+
+  <script>
+    function toggleForm(type) {
+      const imageForm = document.getElementById('imageForm');
+      const videoForm = document.getElementById('videoForm');
+      const imageBtn = document.getElementById('imageBtn');
+      const videoBtn = document.getElementById('videoBtn');
+      if (type === 'image') {
+        imageForm.classList.add('active');
+        videoForm.classList.remove('active');
+        imageBtn.classList.add('active');
+        videoBtn.classList.remove('active');
+      } else {
+        videoForm.classList.add('active');
+        imageForm.classList.remove('active');
+        videoBtn.classList.add('active');
+        imageBtn.classList.remove('active');
+      }
+    }
+    function previewMedia(event, type) {
+      const file = event.target.files[0];
+      const previewContainer = type === 'image' ? document.getElementById('imagePreview') : document.getElementById('videoPreview');
+      previewContainer.innerHTML = '';
+      if (file) {
+        const url = URL.createObjectURL(file);
+        if (type === 'image') {
+          previewContainer.innerHTML = `<img src="${url}" class="preview-image">`;
+        } else {
+          previewContainer.innerHTML = `
+            <video class="preview-video" controls>
+              <source src="${url}" type="${file.type}">
+              Your browser does not support the video tag.
+            </video>`;
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

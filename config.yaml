@@ -1,0 +1,10 @@
+---
+run_local: true              # Set this to true if you are running locally
+gpu: true                    # Use GPU for faster processing
+trim-video: true             # Trim video to a certain length
+trim-video-length: 15        # Trim to first 15 seconds
+original_frame_rate: false   # Use custom frame rate instead of original
+output_frame_rate: '24/1'    # Set desired output frame rate
+colab-mode: false            # Not running in Colab
+original_resolution: false   # Resize video instead of keeping original resolution
+resize-dim: 720              # Resize video width to 720px while maintaining aspect ratio
